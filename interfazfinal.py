@@ -27,10 +27,10 @@ def graficar_funcion(a, b, c, x1, x2, n):
 
         # Dibuja el rectángulo solo hasta el nivel de la función
         if y_rect >= 0:
-            # Dibuja el rectángulo hacia arriba
+            # Dibuja el rectángulo hacia abajo desde el nivel de la función
             plt.bar(x_rect, height=y_rect, bottom=0, width=dx, align='edge', alpha=0.5, color='blue')
         else:
-            # Dibuja el rectángulo hacia abajo
+            # Dibuja el rectángulo hacia arriba desde el nivel de la función
             plt.bar(x_rect, height=-y_rect, bottom=y_rect, width=dx, align='edge', alpha=0.5, color='red')
 
     plt.title('Gráfica de la función cuadrática')
@@ -38,7 +38,7 @@ def graficar_funcion(a, b, c, x1, x2, n):
     plt.ylabel('f(x)')
     plt.legend()
     plt.grid()
-    plt.ylim(bottom=min(y) - 1, top=max(y) + 1)  # Ajustar límites para visualizar mejor
+    plt.ylim(bottom=min(y) - 1, top=max(y) + 1) 
     plt.show()
 
 
@@ -96,7 +96,7 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
 def abrir_grafica_y_area():
     ventana = tk.Toplevel(root)
     ventana.title("Gráfica y Área Bajo la Curva")
-    ventana.geometry("750x700")
+    ventana.geometry("750x700")  # Aumentar la geometría
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
@@ -159,7 +159,7 @@ def abrir_grafica_y_area():
 def abrir_sistema_ecuaciones():
     ventana = tk.Toplevel(root)
     ventana.title("Resolver Sistema de Ecuaciones")
-    ventana.geometry("700x500")  # Aumentar la geometría
+    ventana.geometry("700x500")
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
@@ -225,16 +225,14 @@ def abrir_sistema_ecuaciones():
 
     tk.Button(ventana, text="Resolver", command=resolver_ecuaciones, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
 
-# Ventana principal
 root = tk.Tk()
 root.title("Calculadora de Matemáticas")
-root.geometry("700x500")
+root.geometry("700x500")  # Aumentar la geometría
 root.resizable(False, False)
 root.configure(bg="#0c1433")
 
-# Botones
 tk.Button(root, text="Resolver Sistema de Ecuaciones", command=abrir_sistema_ecuaciones, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
-tk.Button(root, text="Gráfica y Área Bajo la Curva", command=abrir_grafica_y_area, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
+tk.Button(root, text="Gráfico y Área Bajo la Curva", command=abrir_grafica_y_area, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
 tk.Button(root, text="Salir", command=root.quit, bg="red", fg="white", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
 
 root.mainloop()
