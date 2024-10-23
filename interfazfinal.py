@@ -5,14 +5,12 @@ import matplotlib.pyplot as plt
 
 def validar_numeros(char):
     """Permite solo números y el punto decimal."""
-    if char.isdigit() or char == "." or char == "-":
-        return True
-    return False
+    return char.isdigit() or char == "." or char == "-"
 
 def validar_enteros(char):
     """Permite solo números enteros."""
     return char.isdigit()
-    
+
 def graficar_funcion(a, b, c, x1, x2, n):
     """Genera y muestra la gráfica de una función cuadrática y el área bajo la curva usando rectángulos."""
     x = np.linspace(x1, x2, 400)
@@ -92,38 +90,38 @@ def abrir_grafica_y_area():
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
-    tk.Label(ventana, text="Coeficientes a, b, c:", bg="#0c1433", fg="white").pack(pady=10)
+    tk.Label(ventana, text="Coeficientes a, b, c:", bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(pady=10)
 
-    entry_a = tk.Entry(ventana, width=10, validate="key")
+    entry_a = tk.Entry(ventana, width=10, validate="key", font=("Helvetica", 12))
     entry_a['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_a.pack(pady=5)
 
-    entry_b = tk.Entry(ventana, width=10, validate="key")
+    entry_b = tk.Entry(ventana, width=10, validate="key", font=("Helvetica", 12))
     entry_b['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_b.pack(pady=5)
 
-    entry_c = tk.Entry(ventana, width=10, validate="key")
+    entry_c = tk.Entry(ventana, width=10, validate="key", font=("Helvetica", 12))
     entry_c['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_c.pack(pady=5)
 
-    tk.Label(ventana, text="Rango de visualización (x1, x2):", bg="#0c1433", fg="white").pack(pady=10)
+    tk.Label(ventana, text="Rango de visualización (x1, x2):", bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(pady=10)
 
-    entry_x1 = tk.Entry(ventana, width=10, validate="key")
+    entry_x1 = tk.Entry(ventana, width=10, validate="key", font=("Helvetica", 12))
     entry_x1['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_x1.pack(pady=5)
 
-    entry_x2 = tk.Entry(ventana, width=10, validate="key")
+    entry_x2 = tk.Entry(ventana, width=10, validate="key", font=("Helvetica", 12))
     entry_x2['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_x2.pack(pady=5)
 
-    tk.Label(ventana, text="Cantidad de rectángulos:", bg="#0c1433", fg="white").pack(pady=10)
+    tk.Label(ventana, text="Cantidad de rectángulos:", bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(pady=10)
 
-    entry_n = tk.Entry(ventana, width=10, validate="key")
+    entry_n = tk.Entry(ventana, width=10, validate="key", font=("Helvetica", 12))
     entry_n['validatecommand'] = (ventana.register(validar_enteros), '%S')  
     entry_n.pack(pady=5)
 
     resultado_var = tk.StringVar()
-    tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white").pack(pady=10)
+    tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(pady=10)
 
     def calcular_y_graficar():
         resultado = calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, entry_n)
@@ -141,7 +139,7 @@ def abrir_grafica_y_area():
         else:
             messagebox.showerror("Error", "Coeficientes inválidos.")
 
-    tk.Button(ventana, text="Calcular y Graficar", command=calcular_y_graficar, bg="yellow", fg="black", width=35, height=4).pack(pady=20)
+    tk.Button(ventana, text="Calcular y Graficar", command=calcular_y_graficar, bg="yellow", fg="black", font=("Helvetica", 12), width=35, height=4).pack(pady=20)
 
 def abrir_sistema_ecuaciones():
     ventana = tk.Toplevel(root)
@@ -150,7 +148,7 @@ def abrir_sistema_ecuaciones():
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
-    tk.Label(ventana, text="Sistema de Ecuaciones (Ax = b):", bg="#0c1433", fg="white").pack(pady=10)
+    tk.Label(ventana, text="Sistema de Ecuaciones. \nIngrese los valores deseados:", bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(pady=10)
 
     # Entradas para la matriz de coeficientes
     matriz_entries = []
@@ -159,27 +157,27 @@ def abrir_sistema_ecuaciones():
         fila_frame.pack(pady=5)
         fila_entries = []
         for j in range(3):  # 3 incógnitas
-            entry = tk.Entry(fila_frame, width=5, validate="key")
+            entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 12))
             entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
             entry.pack(side=tk.LEFT, padx=2)
             fila_entries.append(entry)
         matriz_entries.append(fila_entries)
 
-        tk.Label(fila_frame, text="=", bg="#0c1433", fg="white").pack(side=tk.LEFT, padx=2)
+        tk.Label(fila_frame, text="=", bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(side=tk.LEFT, padx=2)
 
         # Entrada para el vector de resultados
-        resultado_entry = tk.Entry(fila_frame, width=5, validate="key")
+        resultado_entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 12))
         resultado_entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
         resultado_entry.pack(side=tk.LEFT, padx=2)
 
-    tk.Label(ventana, text="Resultados:", bg="#0c1433", fg="white").pack(pady=10)
+    tk.Label(ventana, text="Resultados:", bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(pady=10)
 
     resultado_var = tk.StringVar()
-    tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white").pack(pady=10)
+    tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white", font=("Helvetica", 12)).pack(pady=10)
 
     def resolver_ecuaciones():
-        A = np.array([[float(matriz_entries[i][j].get()) for j in range(3)] for i in range(3)])
-        b = np.array([float(matriz_entries[i][-1].get()) for i in range(3)])
+        A = np.array([[float(matriz_entries[i][j].get()) for j in range(3)] for i in range(3)]).astype(float)
+        b = np.array([float(matriz_entries[i][-1].get()) for i in range(3)]).astype(float)
 
         try:
             solucion = np.linalg.solve(A, b)
@@ -187,7 +185,7 @@ def abrir_sistema_ecuaciones():
         except np.linalg.LinAlgError:
             resultado_var.set("El sistema no tiene solución única.")
 
-    tk.Button(ventana, text="Resolver", command=resolver_ecuaciones, bg="yellow", fg="black", width=35, height=4).pack(pady=20)
+    tk.Button(ventana, text="Resolver", command=resolver_ecuaciones, bg="yellow", fg="black", font=("Helvetica", 12), width=35, height=4).pack(pady=20)
 
 # Ventana principal
 root = tk.Tk()
@@ -197,8 +195,8 @@ root.resizable(False, False)
 root.configure(bg="#0c1433")
 
 # Botones
-tk.Button(root, text="Resolver Sistema de Ecuaciones", command=abrir_sistema_ecuaciones, bg="yellow", fg="black", width=35, height=4).pack(pady=20)
-tk.Button(root, text="Gráfica y Área Bajo la Curva", command=abrir_grafica_y_area, bg="yellow", fg="black", width=35, height=4).pack(pady=20)
-tk.Button(root, text="Salir", command=root.quit, bg="red", fg="white", width=35, height=4).pack(pady=20)
+tk.Button(root, text="Resolver Sistema de Ecuaciones", command=abrir_sistema_ecuaciones, bg="yellow", fg="black", font=("Helvetica", 12), width=35, height=4).pack(pady=20)
+tk.Button(root, text="Gráfica y Área Bajo la Curva", command=abrir_grafica_y_area, bg="yellow", fg="black", font=("Helvetica", 12), width=35, height=4).pack(pady=20)
+tk.Button(root, text="Salir", command=root.quit, bg="red", fg="white", font=("Helvetica", 12), width=35, height=4).pack(pady=20)
 
 root.mainloop()
