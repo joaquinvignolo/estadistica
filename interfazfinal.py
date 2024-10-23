@@ -65,12 +65,15 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
         n = int(entry_n.get())
         
         if n <= 0 or n > 1000:
-            raise ValueError("El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
+            messagebox.showwarning("Advertencia", "El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
+            return 
+        
         if x1 >= x2:
             raise ValueError("x1 debe ser menor que x2.")
     except ValueError as e:
         messagebox.showerror("Error", str(e))
         return "Entradas inválidas"
+
 
     def f(x):
         return a * x**2 + b * x + c
@@ -93,6 +96,7 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
                  f"Error Suma Superior: {error_superior:.4f}")
 
     return resultado
+
 
 def abrir_grafica_y_area():
     ventana = tk.Toplevel(root)
@@ -185,7 +189,7 @@ def abrir_sistema_ecuaciones():
         resultado_entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14)) 
         resultado_entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
         resultado_entry.pack(side=tk.LEFT, padx=2)
-        resultado_entries.append(resultado_entry)  # Añadir a la lista de resultados
+        resultado_entries.append(resultado_entry)  
 
     tk.Label(ventana, text="Resultados:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
@@ -194,16 +198,13 @@ def abrir_sistema_ecuaciones():
 
     def resolver_ecuaciones():
         try:
-            # Construir la matriz A de coeficientes (3x3)
+            
             A = np.array([[float(matriz_entries[i][j].get()) for j in range(3)] for i in range(3)]).astype(float)
-            # Construir el vector b de resultados (3x1)
             b = np.array([float(resultado_entries[i].get()) for i in range(3)]).astype(float)
-
-            # Verificamos el determinante para ver si el sistema es compatible determinado
             det_A = np.linalg.det(A)
 
             if det_A != 0:
-                # Sistema compatible determinado (una única solución)
+
                 solucion = np.linalg.solve(A, b)
                 resultado_var.set(f"Solución:\n"
                                 f"x₁ = {solucion[0]:.4f}\n"
@@ -211,20 +212,16 @@ def abrir_sistema_ecuaciones():
                                 f"x₃ = {solucion[2]:.4f}\n"
                                 f"El sistema es compatible determinado.")
             else:
-                # Verificamos el rango de la matriz aumentada [A|b] y el rango de A
                 rango_A = np.linalg.matrix_rank(A)
                 matriz_aumentada = np.column_stack((A, b))
                 rango_aumentada = np.linalg.matrix_rank(matriz_aumentada)
 
                 if rango_A == rango_aumentada:
-                    # Sistema compatible indeterminado
                     resultado_var.set("El sistema es compatible indeterminado (tiene infinitas soluciones).")
                 else:
-                    # Sistema incompatible
                     resultado_var.set("El sistema es incompatible (no tiene solución).")
                     
         except ValueError:
-            # Si hay un error al convertir las entradas a float
             resultado_var.set("Error: Asegúrese de que todos los valores sean números.")
         except np.linalg.LinAlgError:
             resultado_var.set("Error al intentar resolver el sistema.")
