@@ -97,7 +97,7 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
 def abrir_grafica_y_area():
     ventana = tk.Toplevel(root)
     ventana.title("Gráfica y Área Bajo la Curva")
-    ventana.geometry("750x700")  # Aumentar la geometría
+    ventana.geometry("750x700") 
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
@@ -167,13 +167,13 @@ def abrir_sistema_ecuaciones():
     tk.Label(ventana, text="Sistema de Ecuaciones 3x3:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     matriz_entries = []
-    resultado_entries = []  # Añadimos esta lista para los resultados independientes
+    resultado_entries = []  
     for i in range(3):
         fila_frame = tk.Frame(ventana, bg="#0c1433")
         fila_frame.pack(pady=5)
         fila_entries = []
         for j in range(3):  # 3 incógnitas
-            entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
+            entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14))
             entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
             entry.pack(side=tk.LEFT, padx=2)
             fila_entries.append(entry)
@@ -181,14 +181,15 @@ def abrir_sistema_ecuaciones():
 
         tk.Label(fila_frame, text="=", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(side=tk.LEFT, padx=2)
 
-        # Entrada para el vector de resultados
-        resultado_entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
+        
+        resultado_entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14)) 
         resultado_entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
         resultado_entry.pack(side=tk.LEFT, padx=2)
+        resultado_entries.append(resultado_entry)  # Añadir a la lista de resultados
 
     tk.Label(ventana, text="Resultados:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
-        resultado_var = tk.StringVar()
+    resultado_var = tk.StringVar()
     tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     def resolver_ecuaciones():
@@ -200,11 +201,15 @@ def abrir_sistema_ecuaciones():
 
             # Verificamos el determinante para ver si el sistema es compatible determinado
             det_A = np.linalg.det(A)
-            
+
             if det_A != 0:
                 # Sistema compatible determinado (una única solución)
                 solucion = np.linalg.solve(A, b)
-                resultado_var.set(f"Solución: {solucion}\nEl sistema es compatible determinado.")
+                resultado_var.set(f"Solución:\n"
+                                f"x₁ = {solucion[0]:.4f}\n"
+                                f"x₂ = {solucion[1]:.4f}\n"
+                                f"x₃ = {solucion[2]:.4f}\n"
+                                f"El sistema es compatible determinado.")
             else:
                 # Verificamos el rango de la matriz aumentada [A|b] y el rango de A
                 rango_A = np.linalg.matrix_rank(A)
@@ -224,11 +229,13 @@ def abrir_sistema_ecuaciones():
         except np.linalg.LinAlgError:
             resultado_var.set("Error al intentar resolver el sistema.")
 
+
     tk.Button(ventana, text="Resolver", command=resolver_ecuaciones, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
+
 
 root = tk.Tk()
 root.title("Calculadora de Matemáticas")
-root.geometry("700x500")  # Aumentar la geometría
+root.geometry("700x500")
 root.resizable(False, False)
 root.configure(bg="#0c1433")
 
