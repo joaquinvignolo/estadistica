@@ -25,16 +25,13 @@ def graficar_funcion(a, b, c, x1, x2, n):
         x_rect = x1 + i * dx
         y_rect = a * x_rect**2 + b * x_rect + c
 
+        # Dibuja el rectángulo solo hasta el nivel de la función
         if y_rect >= 0:
             # Dibuja el rectángulo hacia arriba
             plt.bar(x_rect, height=y_rect, bottom=0, width=dx, align='edge', alpha=0.5, color='blue')
         else:
             # Dibuja el rectángulo hacia abajo
             plt.bar(x_rect, height=-y_rect, bottom=y_rect, width=dx, align='edge', alpha=0.5, color='red')
-
-        # Dibuja el rectángulo que sobresale de la curvatura (si está por encima)
-        if y_rect > 0:
-            plt.bar(x_rect, height=y_rect - 0, bottom=y_rect, width=dx, align='edge', alpha=0.5, color='blue')
 
     plt.title('Gráfica de la función cuadrática')
     plt.xlabel('x')
