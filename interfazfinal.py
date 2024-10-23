@@ -103,7 +103,7 @@ def abrir_grafica_y_area():
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
-    tk.Label(ventana, text="Ingresar el coeficiente tomando de ejemplo del siguiente calculo, a-2b+2c:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
+    tk.Label(ventana, text="Ingresar los coeficientes para una función cuadrática.\n Ejemplo: f(x) = Ax2 + Bx + C", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     frame_coeficientes = tk.Frame(ventana, bg="#0c1433")
     frame_coeficientes.pack(pady=5)
