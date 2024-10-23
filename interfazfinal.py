@@ -63,8 +63,9 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
         x1 = float(entry_x1.get())
         x2 = float(entry_x2.get())
         n = int(entry_n.get())
-        if n <= 0:
-            raise ValueError("El número de rectángulos debe ser positivo.")
+        
+        if n <= 0 or n > 1000:
+            raise ValueError("El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
         if x1 >= x2:
             raise ValueError("x1 debe ser menor que x2.")
     except ValueError as e:
