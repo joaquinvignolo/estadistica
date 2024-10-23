@@ -99,24 +99,29 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
 def abrir_grafica_y_area():
     ventana = tk.Toplevel(root)
     ventana.title("Gráfica y Área Bajo la Curva")
-    ventana.geometry("600x700")  # Aumentar la geometría
+    ventana.geometry("750x700")  # Aumentar la geometría
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
-    tk.Label(ventana, text="Coeficientes a, b, c:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
+    tk.Label(ventana, text="Ingresar el coeficiente tomando de ejemplo del siguiente calculo, a-2b+2c:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
-    entry_a = tk.Entry(ventana, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
+    frame_coeficientes = tk.Frame(ventana, bg="#0c1433")
+    frame_coeficientes.pack(pady=5)
+
+    tk.Label(frame_coeficientes, text="a:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=0, column=0, padx=5)
+    entry_a = tk.Entry(frame_coeficientes, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
     entry_a['validatecommand'] = (ventana.register(validar_numeros), '%S')
-    entry_a.pack(pady=5)
+    entry_a.grid(row=0, column=1, pady=5)
 
-    entry_b = tk.Entry(ventana, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
+    tk.Label(frame_coeficientes, text="b:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=1, column=0, padx=5)
+    entry_b = tk.Entry(frame_coeficientes, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
     entry_b['validatecommand'] = (ventana.register(validar_numeros), '%S')
-    entry_b.pack(pady=5)
+    entry_b.grid(row=1, column=1, pady=5)
 
-    entry_c = tk.Entry(ventana, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
+    tk.Label(frame_coeficientes, text="c:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=2, column=0, padx=5)
+    entry_c = tk.Entry(frame_coeficientes, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
     entry_c['validatecommand'] = (ventana.register(validar_numeros), '%S')
-    entry_c.pack(pady=5)
-
+    entry_c.grid(row=2, column=1, pady=5)
     tk.Label(ventana, text="Rango de visualización (x1, x2):", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     entry_x1 = tk.Entry(ventana, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
