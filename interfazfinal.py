@@ -23,14 +23,27 @@ def graficar_funcion(a, b, c, x1, x2, n):
     dx = (x2 - x1) / n
     for i in range(n):
         x_rect = x1 + i * dx
-        plt.bar(x_rect, a * x_rect**2 + b * x_rect + c, width=dx, align='edge', alpha=0.3, color='orange')
+        y_rect = a * x_rect**2 + b * x_rect + c
+
+        if y_rect >= 0:
+            # Dibuja el rectángulo hacia arriba
+            plt.bar(x_rect, height=y_rect, bottom=0, width=dx, align='edge', alpha=0.5, color='blue')
+        else:
+            # Dibuja el rectángulo hacia abajo
+            plt.bar(x_rect, height=-y_rect, bottom=y_rect, width=dx, align='edge', alpha=0.5, color='red')
+
+        # Dibuja el rectángulo que sobresale de la curvatura (si está por encima)
+        if y_rect > 0:
+            plt.bar(x_rect, height=y_rect - 0, bottom=y_rect, width=dx, align='edge', alpha=0.5, color='blue')
 
     plt.title('Gráfica de la función cuadrática')
     plt.xlabel('x')
     plt.ylabel('f(x)')
     plt.legend()
     plt.grid()
+    plt.ylim(bottom=min(y) - 1, top=max(y) + 1)  # Ajustar límites para visualizar mejor
     plt.show()
+
 
 def obtener_coeficientes(entry_a, entry_b, entry_c):
     """Obtiene los coeficientes de la función cuadrática de las entradas."""
@@ -148,27 +161,18 @@ def abrir_sistema_ecuaciones():
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
-    tk.Label(ventana, text="Sistema de Ecuaciones. \nIngrese los valores deseados:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
+    tk.Label(ventana, text="Sistema de Ecuaciones 3x3:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
-    # Entradas para la matriz de coeficientes
     matriz_entries = []
     for i in range(3):  # 3 ecuaciones
         fila_frame = tk.Frame(ventana, bg="#0c1433")
         fila_frame.pack(pady=5)
-        fila_entries = []
-        for j in range(3):  # 3 incógnitas
-            entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
+        matriz_entries.append([])
+        for j in range(4):  # 3 coeficientes + 1 resultado
+            entry = tk.Entry(fila_frame, width=15, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
             entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
             entry.pack(side=tk.LEFT, padx=2)
-            fila_entries.append(entry)
-        matriz_entries.append(fila_entries)
-
-        tk.Label(fila_frame, text="=", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(side=tk.LEFT, padx=2)
-
-        # Entrada para el vector de resultados
-        resultado_entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14))  # Aumentar tamaño
-        resultado_entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
-        resultado_entry.pack(side=tk.LEFT, padx=2)
+            matriz_entries[i].append(entry)
 
     tk.Label(ventana, text="Resultados:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
