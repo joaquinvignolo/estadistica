@@ -12,25 +12,34 @@ def validar_enteros(char):
     return char.isdigit()
 
 def graficar_funcion(a, b, c, x1, x2, n):
-    """Genera y muestra la gráfica de una función cuadrática y el área bajo la curva usando rectángulos."""
+    """Genera y muestra la gráfica de una función cuadrática y el área bajo la curva usando sumas de Riemann."""
     x = np.linspace(x1, x2, 400)
     y = a * x**2 + b * x + c
 
-    plt.plot(x, y, label=f'{a}x² + {b}x + {c}')
+    plt.plot(x, y, label=f'{a}x² + {b}x + {c}', color='green')
     plt.axhline(0, color='black', lw=0.5, ls='--')
     plt.axvline(0, color='black', lw=0.5, ls='--')
 
     dx = (x2 - x1) / n
+
+    # Suma de Riemann Inferior y Superior en el mismo intervalo
     for i in range(n):
         x_rect = x1 + i * dx
-        y_rect = a * x_rect**2 + b * x_rect + c
+        
+        # Altura en el extremo izquierdo para la suma inferior
+        y_rect_inf = a * x_rect**2 + b * x_rect + c
+        # Altura en el extremo derecho para la suma superior
+        y_rect_sup = a * (x_rect + dx)**2 + b * (x_rect + dx) + c
+        
+        # Asegurar que siempre se dibujen las barras desde la menor altura a la mayor
+        lower = min(y_rect_inf, y_rect_sup)
+        upper = max(y_rect_inf, y_rect_sup)
+        
+        # Ambas barras se dibujan en la misma posición x, con diferentes alturas
+        plt.bar(x_rect, height=upper - lower, bottom=lower, width=dx, align='edge', alpha=0.5, color='orange', label='Suma Superior' if i == 0 else "")
+        plt.bar(x_rect, height=lower if lower >= 0 else -lower, bottom=0, width=dx, align='edge', alpha=0.5, color='blue', label='Suma Inferior' if i == 0 else "")
 
-        if y_rect >= 0:
-            plt.bar(x_rect, height=y_rect, bottom=0, width=dx, align='edge', alpha=0.5, color='blue')
-        else:
-            plt.bar(x_rect, height=-y_rect, bottom=y_rect, width=dx, align='edge', alpha=0.5, color='red')
-
-    plt.title('Gráfica de la función cuadrática')
+    plt.title('Gráfica de la función cuadrática con sumas de Riemann')
     plt.xlabel('x')
     plt.ylabel('f(x)')
     plt.legend()
