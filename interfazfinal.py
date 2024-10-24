@@ -157,45 +157,49 @@ def abrir_grafica_y_area():
     tk.Button(ventana, text="Calcular y Graficar", command=calcular_y_graficar, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
 
 def gauss_jordan(A, b):
-    """Aplica el método de Gauss-Jordan para resolver el sistema de ecuaciones Ax = b."""
     A = np.hstack([A, b.reshape(-1, 1)])  # Crear la matriz aumentada
     filas, columnas = A.shape
-    
-    # Aplicar el proceso de Gauss-Jordan
+
     for i in range(filas):
         # Buscar un pivote no cero
-        if A[i, i] == 0:  
+        if A[i, i] == 0:
             for k in range(i + 1, filas):
                 if A[k, i] != 0:
                     A[[i, k]] = A[[k, i]]  # Intercambia las filas
                     break
-            else:  # Si no se encontró un pivote, el sistema es singular
-                raise ValueError("El sistema de ecuaciones es singular y no tiene solución única.")
-        
-        # Ahora se puede hacer la división
+            else:
+                return None, A  # Indica que puede ser indeterminado o incompatible
+
         A[i] = A[i] / A[i, i]  # Dividir la fila i por el pivote
-        
+
         for j in range(filas):
             if i != j:
                 A[j] = A[j] - A[j, i] * A[i]  # Hacer ceros en las demás filas
-    
-    return A[:, -1], A
+
+    return A[:, -1], A  # Devuelve la solución y la matriz final
 
 
 def resolver_ecuaciones():
     try:
-        # Obtener la matriz A
         A = np.array([[float(matriz_entries[i][j].get()) if matriz_entries[i][j].get() else 0 for j in range(3)] for i in range(3)])
-        # Obtener el vector b
         b = np.array([float(resultado_entries[i].get()) if resultado_entries[i].get() else 0 for i in range(3)])
         
         solucion, matriz_final = gauss_jordan(A, b)
-        
+
         rango_A = np.linalg.matrix_rank(A)
         rango_aumentada = np.linalg.matrix_rank(matriz_final)
         
+        if solucion is None:
+            # Verificar si el sistema es incompatible
+            if rango_A < rango_aumentada:
+                resultado_var.set("El sistema es incompatible (no tiene solución).")
+            else:
+                resultado_var.set("El sistema es indeterminado (tiene infinitas soluciones).")
+            return
+        
+        # Si hay solución
         if rango_A == rango_aumentada:
-            if rango_A == A.shape[1]:  # Número de incógnitas
+            if rango_A == A.shape[1]:
                 resultado_var.set(f"Solución:\n"
                                   f"x = {solucion[0]:.4f}\n"
                                   f"y = {solucion[1]:.4f}\n"
@@ -203,14 +207,11 @@ def resolver_ecuaciones():
                                   f"El sistema es compatible determinado.")
             else:
                 resultado_var.set("El sistema es compatible indeterminado (tiene infinitas soluciones).")
-        else:
-            resultado_var.set("El sistema es incompatible (no tiene solución).")
-            
+    
     except ValueError as e:
-        resultado_var.set(f"Error: {str(e)}. Asegúrese de que todas las entradas son números válidos.")
+        resultado_var.set(f"Error: {str(e)}.")
     except np.linalg.LinAlgError:
         resultado_var.set("Error al intentar resolver el sistema.")
-
 
 
 def abrir_sistema_ecuaciones():
