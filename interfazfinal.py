@@ -25,12 +25,9 @@ def graficar_funcion(a, b, c, x1, x2, n):
         x_rect = x1 + i * dx
         y_rect = a * x_rect**2 + b * x_rect + c
 
-        # Dibuja el rectángulo solo hasta el nivel de la función
         if y_rect >= 0:
-            # Dibuja el rectángulo hacia abajo desde el nivel de la función
             plt.bar(x_rect, height=y_rect, bottom=0, width=dx, align='edge', alpha=0.5, color='blue')
         else:
-            # Dibuja el rectángulo hacia arriba desde el nivel de la función
             plt.bar(x_rect, height=-y_rect, bottom=y_rect, width=dx, align='edge', alpha=0.5, color='red')
 
     plt.title('Gráfica de la función cuadrática')
@@ -40,7 +37,6 @@ def graficar_funcion(a, b, c, x1, x2, n):
     plt.grid()
     plt.ylim(bottom=min(y) - 1, top=max(y) + 1) 
     plt.show()
-
 
 def obtener_coeficientes(entry_a, entry_b, entry_c):
     """Obtiene los coeficientes de la función cuadrática de las entradas."""
@@ -74,7 +70,6 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
         messagebox.showerror("Error", str(e))
         return "Entradas inválidas"
 
-
     def f(x):
         return a * x**2 + b * x + c
 
@@ -97,7 +92,6 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
 
     return resultado
 
-
 def abrir_grafica_y_area():
     ventana = tk.Toplevel(root)
     ventana.title("Gráfica y Área Bajo la Curva")
@@ -105,7 +99,7 @@ def abrir_grafica_y_area():
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
-    tk.Label(ventana, text="Ingresar los coeficientes para una función cuadrática.\n Ejemplo: f(x) = Ax2 + Bx + C", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
+    tk.Label(ventana, text="Ingresar los coeficientes para una función cuadrática.\n Ejemplo: f(x) = Ax² + Bx + C", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     frame_coeficientes = tk.Frame(ventana, bg="#0c1433")
     frame_coeficientes.pack(pady=5)
@@ -124,6 +118,7 @@ def abrir_grafica_y_area():
     entry_c = tk.Entry(frame_coeficientes, width=15, validate="key", font=("Helvetica", 14))
     entry_c['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_c.grid(row=2, column=1, pady=5)
+
     tk.Label(ventana, text="Rango de visualización (x1, x2):", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     entry_x1 = tk.Entry(ventana, width=15, validate="key", font=("Helvetica", 14))
@@ -134,7 +129,7 @@ def abrir_grafica_y_area():
     entry_x2['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_x2.pack(pady=5)
 
-    tk.Label(ventana, text="Cantidad de rectángulos:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
+    tk.Label(ventana, text="Número de rectángulos:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     entry_n = tk.Entry(ventana, width=15, validate="key", font=("Helvetica", 14))
     entry_n['validatecommand'] = (ventana.register(validar_enteros), '%S')  
@@ -161,6 +156,63 @@ def abrir_grafica_y_area():
 
     tk.Button(ventana, text="Calcular y Graficar", command=calcular_y_graficar, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
 
+def gauss_jordan(A, b):
+    """Aplica el método de Gauss-Jordan para resolver el sistema de ecuaciones Ax = b."""
+    A = np.hstack([A, b.reshape(-1, 1)])  # Crear la matriz aumentada
+    filas, columnas = A.shape
+    
+    # Aplicar el proceso de Gauss-Jordan
+    for i in range(filas):
+        # Buscar un pivote no cero
+        if A[i, i] == 0:  
+            for k in range(i + 1, filas):
+                if A[k, i] != 0:
+                    A[[i, k]] = A[[k, i]]  # Intercambia las filas
+                    break
+            else:  # Si no se encontró un pivote, el sistema es singular
+                raise ValueError("El sistema de ecuaciones es singular y no tiene solución única.")
+        
+        # Ahora se puede hacer la división
+        A[i] = A[i] / A[i, i]  # Dividir la fila i por el pivote
+        
+        for j in range(filas):
+            if i != j:
+                A[j] = A[j] - A[j, i] * A[i]  # Hacer ceros en las demás filas
+    
+    return A[:, -1], A
+
+
+def resolver_ecuaciones():
+    try:
+        # Obtener la matriz A
+        A = np.array([[float(matriz_entries[i][j].get()) if matriz_entries[i][j].get() else 0 for j in range(3)] for i in range(3)])
+        # Obtener el vector b
+        b = np.array([float(resultado_entries[i].get()) if resultado_entries[i].get() else 0 for i in range(3)])
+        
+        solucion, matriz_final = gauss_jordan(A, b)
+        
+        rango_A = np.linalg.matrix_rank(A)
+        rango_aumentada = np.linalg.matrix_rank(matriz_final)
+        
+        if rango_A == rango_aumentada:
+            if rango_A == A.shape[1]:  # Número de incógnitas
+                resultado_var.set(f"Solución:\n"
+                                  f"x = {solucion[0]:.4f}\n"
+                                  f"y = {solucion[1]:.4f}\n"
+                                  f"z = {solucion[2]:.4f}\n"
+                                  f"El sistema es compatible determinado.")
+            else:
+                resultado_var.set("El sistema es compatible indeterminado (tiene infinitas soluciones).")
+        else:
+            resultado_var.set("El sistema es incompatible (no tiene solución).")
+            
+    except ValueError as e:
+        resultado_var.set(f"Error: {str(e)}. Asegúrese de que todas las entradas son números válidos.")
+    except np.linalg.LinAlgError:
+        resultado_var.set("Error al intentar resolver el sistema.")
+
+
+
 def abrir_sistema_ecuaciones():
     ventana = tk.Toplevel(root)
     ventana.title("Resolver Sistema de Ecuaciones")
@@ -170,6 +222,7 @@ def abrir_sistema_ecuaciones():
 
     tk.Label(ventana, text="Sistema de Ecuaciones 3x3:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
+    global matriz_entries, resultado_entries, resultado_var
     matriz_entries = []
     resultado_entries = []  
     for i in range(3):
@@ -185,7 +238,6 @@ def abrir_sistema_ecuaciones():
 
         tk.Label(fila_frame, text="=", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(side=tk.LEFT, padx=2)
 
-        
         resultado_entry = tk.Entry(fila_frame, width=5, validate="key", font=("Helvetica", 14)) 
         resultado_entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
         resultado_entry.pack(side=tk.LEFT, padx=2)
@@ -196,39 +248,7 @@ def abrir_sistema_ecuaciones():
     resultado_var = tk.StringVar()
     tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
-    def resolver_ecuaciones():
-        try:
-            
-            A = np.array([[float(matriz_entries[i][j].get()) for j in range(3)] for i in range(3)]).astype(float)
-            b = np.array([float(resultado_entries[i].get()) for i in range(3)]).astype(float)
-            det_A = np.linalg.det(A)
-
-            if det_A != 0:
-
-                solucion = np.linalg.solve(A, b)
-                resultado_var.set(f"Solución:\n"
-                                f"x₁ = {solucion[0]:.4f}\n"
-                                f"x₂ = {solucion[1]:.4f}\n"
-                                f"x₃ = {solucion[2]:.4f}\n"
-                                f"El sistema es compatible determinado.")
-            else:
-                rango_A = np.linalg.matrix_rank(A)
-                matriz_aumentada = np.column_stack((A, b))
-                rango_aumentada = np.linalg.matrix_rank(matriz_aumentada)
-
-                if rango_A == rango_aumentada:
-                    resultado_var.set("El sistema es compatible indeterminado (tiene infinitas soluciones).")
-                else:
-                    resultado_var.set("El sistema es incompatible (no tiene solución).")
-                    
-        except ValueError:
-            resultado_var.set("Error: Asegúrese de que todos los valores sean números.")
-        except np.linalg.LinAlgError:
-            resultado_var.set("Error al intentar resolver el sistema.")
-
-
     tk.Button(ventana, text="Resolver", command=resolver_ecuaciones, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
-
 
 root = tk.Tk()
 root.title("Calculadora de Matemáticas")
