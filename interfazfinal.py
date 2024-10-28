@@ -90,17 +90,19 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
     y_values = f(x_values)
     area_real = np.trapz(y_values, x_values)
 
-    # Cambia aquí para usar abs()
+    # Cambiar aquí para asegurar el uso de abs() para el error
     error_inferior = abs(area_real - suma_inferior)
     error_superior = abs(area_real - suma_superior)
 
-    resultado = (f"Suma inferior: {suma_inferior:.4f}\n"
-                 f"Suma superior: {suma_superior:.4f}\n"
-                 f"Área real: {area_real:.4f}\n"
+    # Mostrar resultados asegurando que se usen valores absolutos donde sea necesario
+    resultado = (f"Suma inferior: {abs(suma_inferior):.4f}\n"
+                 f"Suma superior: {abs(suma_superior):.4f}\n"
+                 f"Área real: {abs(area_real):.4f}\n"
                  f"Error Suma Inferior: {error_inferior:.4f}\n"
                  f"Error Suma Superior: {error_superior:.4f}")
 
     return resultado
+
 
 def abrir_grafica_y_area():
     ventana = tk.Toplevel(root)
@@ -158,7 +160,7 @@ def abrir_grafica_y_area():
 
             resultado = calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, entry_n)
             if resultado is not None:
-                resultado_var.set(f"Área: {resultado}")
+                resultado_var.set(f"{resultado}")
 
         except ValueError:
             messagebox.showwarning("Advertencia", "Por favor, ingresa valores válidos.")
