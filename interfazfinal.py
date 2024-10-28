@@ -208,12 +208,12 @@ def resolver_ecuaciones():
     try:
         A = np.array([[float(matriz_entries[i][j].get()) if matriz_entries[i][j].get() else 0 for j in range(3)] for i in range(3)])
         b = np.array([float(resultado_entries[i].get()) if resultado_entries[i].get() else 0 for i in range(3)])
-        
+
         solucion, matriz_final = gauss_jordan(A, b)
 
         rango_A = np.linalg.matrix_rank(A)
         rango_aumentada = np.linalg.matrix_rank(matriz_final)
-        
+
         if solucion is None:
             # Verificar si el sistema es incompatible
             if rango_A < rango_aumentada:
@@ -221,18 +221,17 @@ def resolver_ecuaciones():
             else:
                 resultado_var.set("El sistema es indeterminado (tiene infinitas soluciones).")
             return
-        
+
         # Si hay solución.
         if rango_A == rango_aumentada:
             if rango_A == A.shape[1]:
-                resultado_var.set(f"Solución:\n"
-                                  f"x = {solucion[0]:.4f}\n"
+                resultado_var.set(f"x = {solucion[0]:.4f}\n"
                                   f"y = {solucion[1]:.4f}\n"
                                   f"z = {solucion[2]:.4f}\n"
                                   f"El sistema es compatible determinado.")
             else:
                 resultado_var.set("El sistema es compatible indeterminado (tiene infinitas soluciones).")
-    
+
     except ValueError as e:
         resultado_var.set(f"Error: {str(e)}.")
     except np.linalg.LinAlgError:
