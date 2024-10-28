@@ -72,6 +72,7 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
         if n <= 0 or n > 1000:
             messagebox.showwarning("Advertencia", "El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
             return 
+
         
         if x1 >= x2:
             raise ValueError("x1 debe ser menor que x2.")
@@ -148,20 +149,20 @@ def abrir_grafica_y_area():
     tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     def calcular_y_graficar():
+        n = int(entry_n.get())
+        
+        if n <= 0 or n > 1000:  
+            messagebox.showwarning("Advertencia", "El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
+            return
+
         resultado = calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, entry_n)
-        resultado_var.set(resultado)
+        if resultado is not None:
+            resultado_var.set(resultado)
+
         a, b, c = obtener_coeficientes(entry_a, entry_b, entry_c)
-        if a is not None:
-            try:
-                x1 = float(entry_x1.get())
-                x2 = float(entry_x2.get())
-                n = int(entry_n.get())
-                if n > 0 and x1 < x2:
-                    graficar_funcion(a, b, c, x1, x2, n)
-            except ValueError as e:
-                messagebox.showerror("Error", str(e))
-        else:
-            messagebox.showerror("Error", "Coeficientes inválidos.")
+        x1 = float(entry_x1.get())
+        x2 = float(entry_x2.get())
+        graficar_funcion(a, b, c, x1, x2, n)
 
     tk.Button(ventana, text="Calcular y Graficar", command=calcular_y_graficar, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
 
@@ -206,7 +207,7 @@ def resolver_ecuaciones():
                 resultado_var.set("El sistema es indeterminado (tiene infinitas soluciones).")
             return
         
-        # Si hay solución
+        # Si hay solución.
         if rango_A == rango_aumentada:
             if rango_A == A.shape[1]:
                 resultado_var.set(f"Solución:\n"
@@ -221,7 +222,6 @@ def resolver_ecuaciones():
         resultado_var.set(f"Error: {str(e)}.")
     except np.linalg.LinAlgError:
         resultado_var.set("Error al intentar resolver el sistema.")
-
 
 def abrir_sistema_ecuaciones():
     ventana = tk.Toplevel(root)
