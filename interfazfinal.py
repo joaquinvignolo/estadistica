@@ -73,7 +73,6 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
             messagebox.showwarning("Advertencia", "El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
             return 
 
-        
         if x1 >= x2:
             raise ValueError("x1 debe ser menor que x2.")
     except ValueError as e:
@@ -91,6 +90,7 @@ def calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, ent
     y_values = f(x_values)
     area_real = np.trapz(y_values, x_values)
 
+    # Cambia aquí para usar abs()
     error_inferior = abs(area_real - suma_inferior)
     error_superior = abs(area_real - suma_superior)
 
