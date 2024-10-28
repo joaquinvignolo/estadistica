@@ -12,6 +12,9 @@ def validar_enteros(char):
     return char.isdigit()
 
 def graficar_funcion(a, b, c, x1, x2, n):
+    if x1 > x2:
+        x1, x2 = x2, x1
+
     x = np.linspace(x1, x2, 400)
     y = a * x**2 + b * x + c
 
@@ -19,26 +22,40 @@ def graficar_funcion(a, b, c, x1, x2, n):
     plt.axhline(0, color='black', lw=0.5, ls='--')
     plt.axvline(0, color='black', lw=0.5, ls='--')
 
-    dx = (x2 - x1) / n
+    y_min, y_max = min(y), max(y)
+    margen = abs(y_max - y_min) * 0.1
+    plt.ylim(y_min - margen, y_max + margen)
 
+    dx = (x2 - x1) / n
     for i in range(n):
         x_rect = x1 + i * dx
         y_rect_inf = a * x_rect**2 + b * x_rect + c
         y_rect_sup = a * (x_rect + dx)**2 + b * (x_rect + dx) + c
-        
-        lower = min(y_rect_inf, y_rect_sup)
-        upper = max(y_rect_inf, y_rect_sup)
 
-        plt.bar(x_rect, height=upper - lower, bottom=lower, width=dx, align='edge', alpha=0.5, color='orange', label='Suma Superior' if i == 0 else "")
-        plt.bar(x_rect, height=max(lower, 0) if lower < 0 else lower, bottom=0, width=dx, align='edge', alpha=0.5, color='blue', label='Suma Inferior' if i == 0 else "")
-    
+        # Determina el valor superior e inferior
+        upper = max(y_rect_inf, y_rect_sup)
+        lower = min(y_rect_inf, y_rect_sup)
+
+        # Dibuja el rectángulo de la suma superior
+        if upper > 0:
+            plt.bar(x_rect, height=upper, bottom=0, width=dx, align='edge', alpha=0.5, color='orange', label='Suma Superior' if i == 0 else "")
+        else:
+            plt.bar(x_rect, height=upper, bottom=0, width=dx, align='edge', alpha=0.5, color='orange', label='Suma Superior' if i == 0 else "")
+        
+        # Dibuja el rectángulo de la suma inferior
+        if lower < 0:  # Cuando la función es negativa
+            plt.bar(x_rect, height=abs(lower), bottom=lower, width=dx, align='edge', alpha=0.5, color='blue', label='Suma Inferior' if i == 0 else "")
+        else:
+            plt.bar(x_rect, height=lower, bottom=0, width=dx, align='edge', alpha=0.5, color='blue', label='Suma Inferior' if i == 0 else "")
+
     plt.title('Gráfica de la función cuadrática con sumas de Riemann')
     plt.xlabel('x')
     plt.ylabel('f(x)')
     plt.legend()
     plt.grid()
-    plt.ylim(bottom=min(y) - 5, top=max(y) + 5)
+
     plt.show()
+
 
 def obtener_coeficientes(entry_a, entry_b, entry_c):
     """Obtiene los coeficientes de la función cuadrática de las entradas."""
@@ -109,17 +126,17 @@ def abrir_grafica_y_area():
     frame_coeficientes = tk.Frame(ventana, bg="#0c1433")
     frame_coeficientes.pack(pady=5)
 
-    tk.Label(frame_coeficientes, text="a:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=0, column=0, padx=5)
+    tk.Label(frame_coeficientes, text="A:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=0, column=0, padx=5)
     entry_a = tk.Entry(frame_coeficientes, width=15, validate="key", font=("Helvetica", 14))
     entry_a['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_a.grid(row=0, column=1, pady=5)
 
-    tk.Label(frame_coeficientes, text="b:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=1, column=0, padx=5)
+    tk.Label(frame_coeficientes, text="B:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=1, column=0, padx=5)
     entry_b = tk.Entry(frame_coeficientes, width=15, validate="key", font=("Helvetica", 14))
     entry_b['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_b.grid(row=1, column=1, pady=5)
 
-    tk.Label(frame_coeficientes, text="c:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=2, column=0, padx=5)
+    tk.Label(frame_coeficientes, text="C:", bg="#0c1433", fg="white", font=("Helvetica", 14)).grid(row=2, column=0, padx=5)
     entry_c = tk.Entry(frame_coeficientes, width=15, validate="key", font=("Helvetica", 14))
     entry_c['validatecommand'] = (ventana.register(validar_numeros), '%S')
     entry_c.grid(row=2, column=1, pady=5)
