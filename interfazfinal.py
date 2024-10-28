@@ -166,13 +166,18 @@ def abrir_grafica_y_area():
     # Función para graficar la función
     def graficar():
         try:
+            n = int(entry_n.get())
+            if n <= 0 or n > 1000:  
+                messagebox.showwarning("Advertencia", "El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
+                return
+
             a, b, c = obtener_coeficientes(entry_a, entry_b, entry_c)
             x1 = float(entry_x1.get())
             x2 = float(entry_x2.get())
-            n = int(entry_n.get())
             graficar_funcion(a, b, c, x1, x2, n)
         except ValueError:
             messagebox.showwarning("Advertencia", "Por favor, ingresa valores válidos.")
+
 
     # Botón para calcular área
     tk.Button(ventana, text="Calcular Área", command=calcular_area, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=2).pack(pady=5)
@@ -266,8 +271,6 @@ def abrir_sistema_ecuaciones():
         resultado_entry['validatecommand'] = (ventana.register(validar_numeros), '%S')
         resultado_entry.pack(side=tk.LEFT, padx=2)
         resultado_entries.append(resultado_entry)  
-
-    tk.Label(ventana, text="Resultados:", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     resultado_var = tk.StringVar()
     tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
