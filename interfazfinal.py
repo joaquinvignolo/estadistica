@@ -109,7 +109,7 @@ def abrir_grafica_y_area():
     ventana.resizable(False, False)
     ventana.configure(bg="#0c1433")
 
-    tk.Label(ventana, text="Ingresar los coeficientes para una función cuadrática.\n Ejemplo: f(x) = Ax² + Bx + C", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
+    tk.Label(ventana, text="Ingresar los coeficientes para una función cuadrática.\nEjemplo: f(x) = Ax² + Bx + C", bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
     frame_coeficientes = tk.Frame(ventana, bg="#0c1433")
     frame_coeficientes.pack(pady=5)
@@ -148,23 +148,38 @@ def abrir_grafica_y_area():
     resultado_var = tk.StringVar()
     tk.Label(ventana, textvariable=resultado_var, bg="#0c1433", fg="white", font=("Helvetica", 14)).pack(pady=10)
 
-    def calcular_y_graficar():
-        n = int(entry_n.get())
-        
-        if n <= 0 or n > 1000:  
-            messagebox.showwarning("Advertencia", "El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
-            return
+    # Función para calcular el área
+    def calcular_area():
+        try:
+            n = int(entry_n.get())
+            if n <= 0 or n > 1000:  
+                messagebox.showwarning("Advertencia", "El número de rectángulos debe ser un número entero positivo y no mayor que 1000.")
+                return
 
-        resultado = calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, entry_n)
-        if resultado is not None:
-            resultado_var.set(resultado)
+            resultado = calcular_area_rectangulos(entry_a, entry_b, entry_c, entry_x1, entry_x2, entry_n)
+            if resultado is not None:
+                resultado_var.set(f"Área: {resultado}")
 
-        a, b, c = obtener_coeficientes(entry_a, entry_b, entry_c)
-        x1 = float(entry_x1.get())
-        x2 = float(entry_x2.get())
-        graficar_funcion(a, b, c, x1, x2, n)
+        except ValueError:
+            messagebox.showwarning("Advertencia", "Por favor, ingresa valores válidos.")
 
-    tk.Button(ventana, text="Calcular y Graficar", command=calcular_y_graficar, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=4).pack(pady=20)
+    # Función para graficar la función
+    def graficar():
+        try:
+            a, b, c = obtener_coeficientes(entry_a, entry_b, entry_c)
+            x1 = float(entry_x1.get())
+            x2 = float(entry_x2.get())
+            n = int(entry_n.get())
+            graficar_funcion(a, b, c, x1, x2, n)
+        except ValueError:
+            messagebox.showwarning("Advertencia", "Por favor, ingresa valores válidos.")
+
+    # Botón para calcular área
+    tk.Button(ventana, text="Calcular Área", command=calcular_area, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=2).pack(pady=5)
+
+    # Botón para graficar función
+    tk.Button(ventana, text="Graficar Función", command=graficar, bg="yellow", fg="black", font=("Helvetica", 14), width=35, height=2).pack(pady=5)
+
 
 def gauss_jordan(A, b):
     A = np.hstack([A, b.reshape(-1, 1)])  # Crear la matriz aumentada
